@@ -1,7 +1,11 @@
+import AppLayout from "./components/layout/AppLayout";
+import MobileNav from "./components/layout/MobileNav";
+
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 text-3xl font-bold text-blue-600">
-      Tailwind is working 🎉
+    <div className="relative max-w-screen w-screen max-h-screen h-[calc(100vh-80px)] flex flex-col items-center justify-center bg-white">
+      <AppLayout />
+      <MobileNav />
     </div>
   );
 }

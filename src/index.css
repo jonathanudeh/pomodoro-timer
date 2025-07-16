@@ -1,3 +1,9 @@
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
+@import "tailwindcss";
+
+html,
+body {
+  @apply bg-white text-white;
+  height: 100%;
+  max-height: 100vh;
+}
