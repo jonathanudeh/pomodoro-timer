@@ -13,7 +13,7 @@ export default function CircularCountdown({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  // 💡 Calculate the full duration based on current mode
+  // calculating full duration based on current mode
   const duration =
     mode === "session"
       ? session * 60

@@ -1,27 +1,31 @@
 import { useTimer } from "../../context/TimerContext";
 
-function MobileNav() {
+function Settings() {
   const { dispatch, themeColor } = useTimer();
 
   return (
-    <footer
+    <div
       style={{ "--user-color": themeColor } as React.CSSProperties}
-      className={` shadow-lg z-20 flex justify-around items-center`}
+      className={`shadow-lg z-20 flex justify-around items-center`}
     >
       <button
         onClick={() => {
           return dispatch({ type: "OPEN-BOTTOMSHEET" });
         }}
-        className="text-[color:var(--user-color)] rounded-full px-3 h-10 w-fit cursor-pointer flex"
+        className="text-[color:var(--user-color)] rounded-full px-3 h-10 w-fit cursor-pointer font-bold text-xs flex items-center justify-center"
       >
-        <img src="/settings.svg" alt="setting icon" className="w-7 h-7" />{" "}
-        Setting
+        <img
+          src="/settings.svg"
+          alt="setting icon"
+          className="w-7 h-7 bg-red-500"
+        />{" "}
+        Settings
       </button>
-    </footer>
+    </div>
   );
 }
 
-export default MobileNav;
+export default Settings;
 
 /*
 <footer

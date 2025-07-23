@@ -14,7 +14,7 @@ function StartStop() {
   return (
     <button
       style={{ "--user-color": themeColor } as React.CSSProperties}
-      className={`w-30 h-10 bg-[color:var(--user-color)] rounded-full font-bold text-lg cursor-pointer`}
+      className={`w-40 h-12 bg-[color:var(--user-color)] rounded-full font-bold text-lg shadow-2xl cursor-pointer`}
       onClick={handleStartStop}
     >
       {isRunning && "Stop"}

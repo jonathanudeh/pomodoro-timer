@@ -5,6 +5,7 @@ import TimerCircle from "../timer/TimerCircle";
 import TimerCounter from "../timer/TimerCounter";
 import { useTimer } from "../../context/TimerContext";
 import TimerMode from "../timer/TimerMode";
+import MobileNav from "./Settings";
 
 function AppLayout() {
   const { isBottomSheetOpen, themeColor } = useTimer();
@@ -17,12 +18,12 @@ function AppLayout() {
       >
         <Session />
       </header>
-      <main className="relative max-w-full w-full h-full flex flex-col items-center justify-start pt-10 gap-5">
+      <main className="relative max-w-full w-full h-full flex flex-col items-center justify-start pt-5 gap-5">
         <TimerMode />
         <TimerCircle />
         <TimerCounter />
         <StartStop />
-        {/* <MobileNav /> */}
+        <MobileNav />
         {isBottomSheetOpen && <BottomSheet />}
       </main>
     </>
