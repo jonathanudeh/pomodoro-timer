@@ -1,5 +1,11 @@
+import { useTimer } from "../../context/TimerContext";
+
 function TimerCounter() {
-  return <div className="font-bold  text-5xl text-black">00:00</div>;
+  const { formatTime, timeLeft } = useTimer();
+
+  return (
+    <div className="font-bold  text-5xl text-black">{formatTime(timeLeft)}</div>
+  );
 }
 
 export default TimerCounter;

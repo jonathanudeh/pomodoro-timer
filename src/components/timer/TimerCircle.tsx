@@ -1,164 +1,72 @@
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { useTimer } from "../../context/TimerContext";
 
-type props = {
-  progress: number;
-  size: number;
-  strokeWidth: number;
-  color: string;
-  imageSrc: string;
-  secondImageSrc: string;
-};
-
-const TimerCircle: React.FC<props> = ({
-  progress,
-  size = 150,
-  strokeWidth = 10,
-  color = "#10b981",
+export default function CircularCountdown({
+  size = 180,
+  strokeWidth = 15,
   imageSrc = "/tomatoe.svg",
   secondImageSrc = "/clock-handle.svg",
-}) => {
+}) {
+  const { mode, timeLeft, session, shortBreak, longBreak, themeColor } =
+    useTimer();
+
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const center = size / 2;
 
-  const progressValue = useMotionValue(progress);
-  const strokeDashoffset = useTransform(
-    progressValue,
-    [0, 1],
-    [circumference, 0]
-  );
+  // 💡 Calculate the full duration based on current mode
+  const duration =
+    mode === "session"
+      ? session * 60
+      : mode === "shortBreak"
+      ? shortBreak * 60
+      : longBreak * 60;
 
-  useEffect(() => {
-    progressValue.set(progress);
-  }, [progress, progressValue]);
+  const percentage = (timeLeft / duration) * 100;
+  const offset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="relative" style={{ width: size, height: size }}>
+    <div className="relative w-fit h-fit">
       <svg width={size} height={size}>
+        {/* Background circle */}
         <circle
-          cx={center}
-          cy={center}
-          r={radius}
-          stroke="#e5e7eb"
+          stroke="#E5E7EB"
+          fill="transparent"
           strokeWidth={strokeWidth}
-          fill="none"
-        />
-        <motion.circle
-          cx={center}
-          cy={center}
           r={radius}
-          stroke={color}
+          cx={size / 2}
+          cy={size / 2}
+        />
+
+        {/* Progress circle */}
+        <motion.circle
+          stroke={themeColor}
+          fill="transparent"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
-          fill="none"
-          strokeDasharray={250}
-          style={{ strokeDashoffset }}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          r={radius}
+          cx={size / 2}
+          cy={size / 2}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          initial={false}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         />
       </svg>
 
-      <img
-        src={imageSrc}
-        alt="Tomato"
-        className="absolute top-1/2 left-1/2 w-25 h-25 -translate-x-1/2 -translate-y-1/2 object-contain"
-      />
-      <img
-        src={secondImageSrc}
-        alt="Tomato"
-        className="absolute top-1/2 left-1/2 w-10 h-10 -translate-x-1/2 -translate-y-1/3 object-contain"
-      />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <img
+          src={imageSrc}
+          alt="Tomato"
+          className="absolute top-1/2 left-1/2 w-30 h-30 -translate-x-1/2 -translate-y-1/2 object-contain"
+        />
+        <img
+          src={secondImageSrc}
+          alt="Tomato"
+          className="absolute top-1/2 left-1/2 w-13 h-13 -translate-x-1/2 -translate-y-1/3 object-contain"
+        />
+      </div>
     </div>
   );
-};
-
-export default TimerCircle;
-
-// import React from 'react';
-// import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-
-// type Props = {
-//   percentage: number; // value between 0 and 100
-//   size?: number; // in px
-//   strokeWidth?: number;
-//   color?: string;
-//   imageSrc?: string; // image for center (like tomato)
-// };
-
-// const CircularProgress: React.FC<Props> = ({
-//   percentage,
-//   size = 150,
-//   strokeWidth = 10,
-//   color = '#10b981',
-//   imageSrc = '/tomato.png', // default tomato image path
-// }) => {
-//   const radius = (size - strokeWidth) / 2;
-//   const circumference = 2 * Math.PI * radius;
-//   const center = size / 2;
-
-//   const progress = useMotionValue(0);
-//   const strokeDashoffset = useTransform(
-//     progress,
-//     [0, 100],
-//     [circumference, 0]
-//   );
-
-//   React.useEffect(() => {
-//     const controls = animate(progress, percentage, {
-//       duration: 0.8,
-//       ease: 'easeInOut',
-//     });
-//     return controls.stop;
-//   }, [percentage]);
-
-//   // Ball tip position
-//   const angle = (percentage / 100) * 2 * Math.PI - Math.PI / 2;
-//   const ballX = center + radius * Math.cos(angle);
-//   const ballY = center + radius * Math.sin(angle);
-
-//   return (
-//     <div className="relative" style={{ width: size, height: size }}>
-//       {/* SVG Ring */}
-//       <svg width={size} height={size}>
-//         <circle
-//           cx={center}
-//           cy={center}
-//           r={radius}
-//           stroke="#e5e7eb"
-//           strokeWidth={strokeWidth}
-//           fill="none"
-//         />
-//         <motion.circle
-//           cx={center}
-//           cy={center}
-//           r={radius}
-//           stroke={color}
-//           strokeWidth={strokeWidth}
-//           strokeLinecap="round"
-//           fill="none"
-//           strokeDasharray={circumference}
-//           style={{ strokeDashoffset }}
-//         />
-//       </svg>
-
-//       {/* Tip Ball */}
-//       <motion.div
-//         className="absolute bg-white border border-green-500 rounded-full shadow"
-//         style={{
-//           width: 12,
-//           height: 12,
-//           left: ballX - 6,
-//           top: ballY - 6,
-//         }}
-//       />
-
-//       {/* Center Image */}
-//       <img
-//         src={imageSrc}
-//         alt="Tomato"
-//         className="absolute top-1/2 left-1/2 w-10 h-10 -translate-x-1/2 -translate-y-1/2 object-contain"
-//       />
-//     </div>
-//   );
-// };
-
-// export default CircularProgress;
+}

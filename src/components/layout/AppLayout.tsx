@@ -1,21 +1,29 @@
 import BottomSheet from "../BottomSheet";
-import Session from "../timer/session";
+import Session from "../timer/CurrSession";
 import StartStop from "../timer/StartStopBtn";
 import TimerCircle from "../timer/TimerCircle";
 import TimerCounter from "../timer/TimerCounter";
+import { useTimer } from "../../context/TimerContext";
+import TimerMode from "../timer/TimerMode";
 
 function AppLayout() {
+  const { isBottomSheetOpen, themeColor } = useTimer();
+
   return (
     <>
-      <header className="h-20 max-w-30 w-30 bg-red-500 ml-auto rounded-bl-4xl flex flex-col items-center justify-center">
+      <header
+        style={{ "--user-color": themeColor } as React.CSSProperties}
+        className={`h-30 max-w-30 w-30 bg-[color:var(--user-color)] ml-auto rounded-bl-4xl flex flex-col items-center justify-center`}
+      >
         <Session />
       </header>
-      <main className="relative max-w-full bg-blue-400  w-full h-full flex flex-col items-center justify-start pt-20 gap-5">
+      <main className="relative max-w-full w-full h-full flex flex-col items-center justify-start pt-10 gap-5">
+        <TimerMode />
         <TimerCircle />
         <TimerCounter />
         <StartStop />
         {/* <MobileNav /> */}
-        {/* <BottomSheet /> */}
+        {isBottomSheetOpen && <BottomSheet />}
       </main>
     </>
   );
