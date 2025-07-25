@@ -5,7 +5,7 @@ import {
   useReducer,
   type ReactNode,
 } from "react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const DEFAULT_SESSION = 25;
 type ModeType = "session" | "shortBreak" | "longBreak";
@@ -23,6 +23,7 @@ const initialState: TimerState = {
   isBottomSheetOpen: false,
   themeColor: "#fb2c36",
   isAlarmMuted: false,
+  message: null,
 };
 
 type TimerState = {
@@ -37,6 +38,7 @@ type TimerState = {
   isBottomSheetOpen: boolean;
   themeColor: string;
   isAlarmMuted: boolean;
+  message: string | null;
 };
 
 type TimerAction =
@@ -49,12 +51,14 @@ type TimerAction =
   | { type: "SET_TIME"; payload: { mode: ModeType; value: number } }
   | { type: "SET_THEME_COLOR"; payload: string }
   | { type: "SET_SESSION_NUM"; payload: number }
-  | { type: "TOGGLE_ALARM" };
+  | { type: "TOGGLE_ALARM" }
+  | { type: "SET_MESSAGE"; payload: string | null };
 
 type TimerContextType = TimerState & {
   dispatch: React.Dispatch<TimerAction>;
   formatTime: (seconds: number) => string;
 };
+
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
 
 type TimerProviderProps = {
@@ -71,12 +75,11 @@ function reducer(state: TimerState, action: TimerAction): TimerState {
 
     case "SET_TIME": {
       if (state.isRunning) {
-        toast.error("Pause timer to change sessions");
-        return state;
+        return { ...state, message: "Pause timer to edit time" };
       }
 
       const { value, mode } = action.payload;
-      const updatedTime = Math.max(1, value);
+      const updatedTime = value; //Math.max(1, value);
       const timeLeft = state.mode === mode ? updatedTime * 60 : state.timeLeft;
 
       return {
@@ -129,8 +132,7 @@ function reducer(state: TimerState, action: TimerAction): TimerState {
 
     case "SWITCH_MODE":
       if (state.isRunning) {
-        toast.error("Pause timer to change sessions");
-        return state;
+        return { ...state, message: "Pause timer to change modes." };
       }
 
       {
@@ -159,6 +161,9 @@ function reducer(state: TimerState, action: TimerAction): TimerState {
     case "TOGGLE_ALARM":
       return { ...state, isAlarmMuted: !state.isAlarmMuted };
 
+    case "SET_MESSAGE":
+      return { ...state, message: action.payload };
+
     default:
       throw new Error("reducer's default return");
   }
@@ -178,17 +183,21 @@ const TimerProvider = ({ children }: TimerProviderProps) => {
       completedSessions,
       mode,
       isAlarmMuted,
+      message,
     },
     dispatch,
   ] = useReducer(reducer, initialState);
 
   function formatTime(seconds: number) {
-    const mins = Math.floor(seconds / 60);
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
 
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+    const hoursStr = hrs > 0 ? `${hrs.toString().padStart(2, "0")}:` : "";
+    const minutesStr = mins.toString().padStart(2, "0");
+    const secondsStr = secs.toString().padStart(2, "0");
+
+    return `${hoursStr}${minutesStr}:${secondsStr}`;
   }
 
   useEffect(
@@ -218,6 +227,7 @@ const TimerProvider = ({ children }: TimerProviderProps) => {
         completedSessions,
         mode,
         isAlarmMuted,
+        message,
         formatTime,
         dispatch,
       }}

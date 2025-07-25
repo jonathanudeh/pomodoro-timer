@@ -5,7 +5,7 @@ import TimerCircle from "../timer/TimerCircle";
 import TimerCounter from "../timer/TimerCounter";
 import { useTimer } from "../../context/TimerContext";
 import TimerMode from "../timer/TimerMode";
-import MobileNav from "./Settings";
+import Settings from "./Settings";
 
 function AppLayout() {
   const { isBottomSheetOpen, themeColor } = useTimer();
@@ -23,7 +23,7 @@ function AppLayout() {
         <TimerCircle />
         <TimerCounter />
         <StartStop />
-        <MobileNav />
+        <Settings />
         {isBottomSheetOpen && <BottomSheet />}
       </main>
     </>

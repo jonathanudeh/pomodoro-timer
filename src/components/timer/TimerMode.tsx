@@ -6,12 +6,12 @@ function TimerMode() {
   return (
     <div
       style={{ "--user-color": themeColor } as React.CSSProperties}
-      className="bg-[color:var(--user-color)]/70 mb-10 w-3/4 h-15 rounded-full flex items-center justify-around font-bold text-lg shadow-2xl"
+      className="bg-[color:var(--user-color)]/70 mb-10 w-3/4 sm:w-3/6 h-15 rounded-full flex items-center justify-around font-bold text-lg shadow-2xl"
     >
       <button
         className={`${
           mode === "session" && "bg-[color:var(--user-color)] shadow-lg"
-        } rounded-full px-3 h-10 w-fit cursor-pointer`}
+        } rounded-full px-3 sm:px-6 h-10 w-fit cursor-pointer`}
         onClick={() => dispatch({ type: "SWITCH_MODE", payload: "session" })}
       >
         Session
@@ -20,7 +20,7 @@ function TimerMode() {
       <button
         className={`${
           mode === "shortBreak" && "bg-[color:var(--user-color)] shadow-lg"
-        } rounded-full px-3 h-10 w-fit cursor-pointer`}
+        } rounded-full px-3 sm:px-6 h-10 w-fit cursor-pointer`}
         onClick={() => dispatch({ type: "SWITCH_MODE", payload: "shortBreak" })}
       >
         Short
@@ -29,7 +29,7 @@ function TimerMode() {
       <button
         className={`${
           mode === "longBreak" && "bg-[color:var(--user-color)] shadow-lg"
-        } rounded-full px-3 h-10 w-fit cursor-pointer`}
+        } rounded-full px-3 sm:px-6 h-10 w-fit cursor-pointer`}
         onClick={() => dispatch({ type: "SWITCH_MODE", payload: "longBreak" })}
       >
         Long
