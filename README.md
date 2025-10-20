@@ -6,6 +6,10 @@ A sleek, minimal Pomodoro timer app built with **React + TypeScript + Tailwind C
 
 ---
 
+🔗 **Live Demo:** https://pomobae.vercel.app/
+
+---
+
 ## 🚀 Tech Stack
 
 - ⚛️ React (with `useReducer` + `Context API`)
